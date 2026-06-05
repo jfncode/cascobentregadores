@@ -47,12 +47,54 @@
       var whatsapp = document.getElementById('whatsapp').value;
       var plataforma = document.getElementById('plataforma').value;
       var relato = document.getElementById('relato').value;
-      var msg = 'Olá, enviei um formulário pelo site entregadorbloqueado.com.br.\n\n'
+      var msg = 'Olá, enviei um formulário pelo site desbloqueiodeapp.com.br.\n\n'
         + 'Nome: ' + nome + '\n'
         + 'WhatsApp: ' + whatsapp + '\n'
         + 'Plataforma: ' + plataforma + '\n'
         + 'Relato: ' + relato;
       window.open('https://wa.me/5517991999006?text=' + encodeURIComponent(msg), '_blank');
+    });
+  }
+
+  // ── FAQ accordion ──
+  var faqItems = document.querySelectorAll('.faq__item');
+  faqItems.forEach(function (item) {
+    item.addEventListener('toggle', function () {
+      if (item.open) {
+        faqItems.forEach(function (other) {
+          if (other !== item && other.open) other.open = false;
+        });
+      }
+    });
+  });
+
+  // ── Smooth scroll for anchor links ──
+  document.querySelectorAll('a[href^="#"]').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      var target = document.querySelector(a.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        var offset = nav.offsetHeight + 16;
+        var top = target.getBoundingClientRect().top + window.scrollY - offset;
+        window.scrollTo({ top: top, behavior: 'smooth' });
+      }
+    });
+  });
+
+  // ── Scroll reveal animation ──
+  var revealElements = document.querySelectorAll('.card, .timeline__step, .depoimento, .acordao, .faq__item');
+  if ('IntersectionObserver' in window) {
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('revealed');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+    revealElements.forEach(function (el) {
+      el.classList.add('reveal');
+      observer.observe(el);
     });
   }
 })();
